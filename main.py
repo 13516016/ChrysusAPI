@@ -1,6 +1,6 @@
 from flask import Flask
 from sqlalchemy import create_engine, select
-from payment import payment_model, payment_repository, payment_usecase
+from payment import payment_model, payment_repository, payment_usecase, payment_route
 import configparser
 
 def read_config(config_filename='config.ini'):
@@ -8,8 +8,9 @@ def read_config(config_filename='config.ini'):
   config.read(config_filename)
   return config
 
-def create_app():
+def create_app(usecases):
   app = Flask(__name__)
+  app.register_blueprint(payment_route.payment_blueprint(usecases["payment"]), url_prefix='/payment')
   return app
 
 def connect_db(username, password, host, dbname ):
@@ -41,5 +42,6 @@ if __name__ == "__main__":
   repositories = create_repositories(db_connection)
   usecases = create_usecases(repositories)
 
-  app = create_app()
+  app = create_app(usecases)
+  app.run(debug=True)
   

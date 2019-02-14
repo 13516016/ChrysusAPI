@@ -11,6 +11,9 @@ class Account:
   def __eq__(self,other):
     return self.account_id == other.account_id and self.account_no == other.account_no and self.balance == other.balance
 
+  def serialize(self):
+    return self.__dict__
+
 class Transaction:
   def __init__(self, transaction_id, sender_account_no, receiver_account_no,amount):
     self.transaction_id = transaction_id
@@ -24,6 +27,9 @@ class Transaction:
       self.sender_account_no == other.sender_account_no and \
       self.amount == other.amount and \
       self.amount == other.amount
+  
+  def serialize(self):
+    return self.__dict__
 
 account_model = Table(
   'account', metadata,
