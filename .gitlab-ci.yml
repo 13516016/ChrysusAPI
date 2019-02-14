@@ -12,3 +12,6 @@ unittest:
   stage: test
   script:
     - python -m unittest discover -v
+
+  dependencies:
+    - install_dependencies
