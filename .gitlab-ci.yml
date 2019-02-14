@@ -7,9 +7,11 @@ install_dependencies:
   stage: build
   script:
     - pip install -r requirements.txt
-  
+    
 unittest:
   stage: test
   script:
     - python -m unittest discover -v
 
+  dependencies:
+    - install_dependencies
