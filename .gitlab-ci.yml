@@ -1,17 +1,13 @@
 image: python:3.6
-stages:
-  - build
-  - test
 
-install_dependencies:
-  stage: build
-  script:
-    - pip install -r requirements.txt
+before_script:
+  - apt-get -y update
+  - pip install -r requirements.txt
+
+stages:
+  - test
     
-unittest:
+test:
   stage: test
   script:
     - python -m unittest discover -v
-
-  dependencies:
-    - install_dependencies
