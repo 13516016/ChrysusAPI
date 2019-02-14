@@ -10,4 +10,4 @@ stages:
 test:
   stage: test
   script:
-    - python -m unittest discover -v
+    - python -m unittest discover test -v
