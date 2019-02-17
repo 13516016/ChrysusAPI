@@ -3,7 +3,7 @@ image: python:3.6
 before_script:
   - apt-get -y update
   - pip install -r requirements.txt
-  - apt-get update -qq && apt-get install -y -qq sshpass
+  - apt-get update -qq && apt-get install -y -qq sshpass git-core
 
 stages:
   - test
@@ -19,5 +19,7 @@ staging:
   script: 
     - sshpass -V
     - export SSHPASS=$USER_PASS
-    - sshpass -e scp -o stricthostkeychecking=no -r . root@198.46.158.22:~
+    - sshpass -e ssh root@198.46.158.22 
+    - git clone https://gitlab.informatika.org/athena/backend
+
 
