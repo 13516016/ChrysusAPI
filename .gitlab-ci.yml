@@ -3,11 +3,21 @@ image: python:3.6
 before_script:
   - apt-get -y update
   - pip install -r requirements.txt
+  - apt-get update -qq && apt-get install -y -qq sshpass
 
 stages:
   - test
+  - staging
     
 test:
   stage: test
   script:
     - python -m unittest discover test -v
+
+staging: 
+  stage: staging
+  script: 
+    - sshpass -V
+    - export SSHPASS=$USER_PASS
+    - sshpass -e scp -o stricthostkeychecking=no -r . root@198.46.158.22:~
+
