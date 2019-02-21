@@ -4,6 +4,8 @@ from payment import payment_model, payment_repository, payment_usecase, payment_
 from news import news_model, news_repository, news_usecase, news_route
 import configparser
 
+app = Flask(__name__)
+
 def read_config(config_filename='config.ini'):
   config = configparser.ConfigParser()
   config.read(config_filename)
@@ -38,6 +40,5 @@ db_connection = engine.connect()
 repositories = create_repositories(db_connection)
 usecases = create_usecases(repositories)
 
-app = Flask(__name__)
 app.register_blueprint(payment_route.payment_blueprint(usecases["payment"]), url_prefix='/payment')
 app.run()
