@@ -9,6 +9,11 @@ def read_config(config_filename='config.ini'):
   config.read(config_filename)
   return config
 
+def create_app(usecases):
+  app = Flask(__name__)
+  app.register_blueprint(payment_route.payment_blueprint(usecases["payment"]), url_prefix='/payment')
+  return app
+
 def connect_db(username, password, host, dbname ):
   engine = create_engine(f'postgresql://{username}:{password}@{host}/{dbname}')
   return engine
@@ -27,6 +32,7 @@ def create_usecases(repositories):
   usecases["payment"]=payment_usecase.PaymentUsecase(repositories["payment"])
   return usecases
 
+if __name__ == "__main__":
   config = read_config('config.ini')
   engine = connect_db(
     config["POSTGRESQL"]["Username"],
@@ -38,11 +44,6 @@ def create_usecases(repositories):
   repositories = create_repositories(db_connection)
   usecases = create_usecases(repositories)
 
-def create_app():
-  app = Flask(__name__)
-  app.register_blueprint(payment_route.payment_blueprint(usecases["payment"]), url_prefix='/payment')
-  return app
-
-  app = create_app()
-  app.run(debug=True)
+  app = create_app(usecases)
+  app.run(debug=False)
   
