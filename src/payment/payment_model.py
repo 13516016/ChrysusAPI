@@ -3,13 +3,16 @@ from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
 metadata = MetaData()
 
 class Account:
-  def __init__(self, account_id, account_no, balance):
+  def __init__(self, account_id, firebase_uid,name, address, phone, balance):
     self.account_id = account_id
-    self.account_no = account_no
+    self.firebase_uid = firebase_uid
     self.balance = balance
+    self.name = name
+    self.address = address
+    self.phone = phone
 
   def __eq__(self,other):
-    return self.account_id == other.account_id and self.account_no == other.account_no and self.balance == other.balance
+    return self.firebase_uid == other.firebase_uid and self.account_no == other.account_no and self.balance == other.balance and self.name == other.name and self.address == other.address and self.phone == other.phone
 
   def serialize(self):
     return self.__dict__
@@ -23,7 +26,7 @@ class Transaction:
     
   def __eq__(self,other):
     return \
-      self.account_id == other.account_id and \
+      self.firebase_uid == other.firebase_uid and \
       self.sender_account_no == other.sender_account_no and \
       self.amount == other.amount and \
       self.amount == other.amount
@@ -34,14 +37,17 @@ class Transaction:
 account_model = Table(
   'account', metadata,
   Column('account_id', Integer, primary_key=True),
-  Column('account_no', String), 
+  Column('firebase_uid', String), 
+  Column('name', String), 
+  Column('address', String), 
+  Column('phone', String), 
   Column('balance', Integer))
 
 transaction_model = Table(
   'transaction', metadata, 
   Column('transaction_id', Integer, primary_key=True),
-  Column('sender_account_id', None, ForeignKey('account.account_id')),
-  Column('receiver_account_id', None, ForeignKey('account.account_id')),
+  Column('sender_account_uid', String),
+  Column('receiver_account_uid', String),
   Column('amount', Integer)
 )
 

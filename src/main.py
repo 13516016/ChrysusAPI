@@ -1,6 +1,7 @@
 from flask import Flask
 from sqlalchemy import create_engine, select
 from payment import payment_model, payment_repository, payment_usecase, payment_route
+from news import news_model, news_repository, news_usecase, news_route
 import configparser
 
 def read_config(config_filename='config.ini'):
@@ -19,6 +20,7 @@ def connect_db(username, password, host, dbname ):
 
 def create_models(engine):
   payment_model.create_payment_model(engine)
+  news_model.create_news_model(engine)
 
 def create_repositories(db_connection):
   repositories = {}
@@ -31,7 +33,7 @@ def create_usecases(repositories):
   return usecases
 
 if __name__ == "__main__":
-  config = read_config()
+  config = read_config('config-dev.ini')
   engine = connect_db(
     config["POSTGRESQL"]["Username"],
     config["POSTGRESQL"]["Password"],

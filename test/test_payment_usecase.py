@@ -1,7 +1,7 @@
 import unittest
-from payment.payment_usecase import PaymentUsecase
-from payment.payment_model import Account
-from payment.mock_payment_repository import MockPaymentRepository
+from src.payment.payment_usecase import PaymentUsecase
+from src.payment.payment_model import Account
+from src.payment.mock_payment_repository import MockPaymentRepository
 
 mock_account_data = [
   (1,"XC1414124",2000),
