@@ -40,4 +40,4 @@ usecases = create_usecases(repositories)
 
 app = Flask(__name__)
 app.register_blueprint(payment_route.payment_blueprint(usecases["payment"]), url_prefix='/payment')
-app.run()
+app.run(port=8080)
