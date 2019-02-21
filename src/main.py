@@ -33,7 +33,7 @@ def create_usecases(repositories):
   return usecases
 
 if __name__ == "__main__":
-  config = read_config('config-dev.ini')
+  config = read_config('config.ini')
   engine = connect_db(
     config["POSTGRESQL"]["Username"],
     config["POSTGRESQL"]["Password"],
