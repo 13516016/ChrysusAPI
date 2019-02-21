@@ -1,1 +1,1 @@
-web: gunicorn main:app(usecases)
+web: gunicorn main:create_app(usecases)
