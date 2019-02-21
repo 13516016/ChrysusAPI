@@ -11,6 +11,10 @@ def read_config(config_filename='config.ini'):
   config.read(config_filename)
   return config
 
+def create_app(usecases):
+  app.register_blueprint(payment_route.payment_blueprint(usecases["payment"]), url_prefix='/payment')
+  return app
+
 def connect_db(username, password, host, dbname ):
   engine = create_engine(f'postgresql://{username}:{password}@{host}/{dbname}')
   return engine
@@ -29,16 +33,18 @@ def create_usecases(repositories):
   usecases["payment"]=payment_usecase.PaymentUsecase(repositories["payment"])
   return usecases
 
-config = read_config('config.ini')
-engine = connect_db(
-  config["POSTGRESQL"]["Username"],
-  config["POSTGRESQL"]["Password"],
-  config["POSTGRESQL"]["Host"],
-  config["POSTGRESQL"]["DBName"])
-create_models(engine)
-db_connection = engine.connect()
-repositories = create_repositories(db_connection)
-usecases = create_usecases(repositories)
+if __name__ == "__main__":
+  config = read_config('config.ini')
+  engine = connect_db(
+    config["POSTGRESQL"]["Username"],
+    config["POSTGRESQL"]["Password"],
+    config["POSTGRESQL"]["Host"],
+    config["POSTGRESQL"]["DBName"])
+  create_models(engine)
+  db_connection = engine.connect()
+  repositories = create_repositories(db_connection)
+  usecases = create_usecases(repositories)
 
-app.register_blueprint(payment_route.payment_blueprint(usecases["payment"]), url_prefix='/payment')
-app.run()
+  app = create_app(usecases)
+  app.run(debug=True)
+  
