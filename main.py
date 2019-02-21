@@ -32,18 +32,16 @@ def create_usecases(repositories):
   usecases["payment"]=payment_usecase.PaymentUsecase(repositories["payment"])
   return usecases
 
-if __name__ == "__main__":
-  config = read_config('config.ini')
-  engine = connect_db(
-    config["POSTGRESQL"]["Username"],
-    config["POSTGRESQL"]["Password"],
-    config["POSTGRESQL"]["Host"],
-    config["POSTGRESQL"]["DBName"])
-  create_models(engine)
-  db_connection = engine.connect()
-  repositories = create_repositories(db_connection)
-  usecases = create_usecases(repositories)
+config = read_config('config.ini')
+engine = connect_db(
+  config["POSTGRESQL"]["Username"],
+  config["POSTGRESQL"]["Password"],
+  config["POSTGRESQL"]["Host"],
+  config["POSTGRESQL"]["DBName"])
+create_models(engine)
+db_connection = engine.connect()
+repositories = create_repositories(db_connection)
+usecases = create_usecases(repositories)
 
-  app = create_app(usecases)
-  app.run(debug=True)
-  
+app = create_app(usecases)
+app.run(debug=False)
