@@ -42,5 +42,5 @@ def create_usecases(repositories):
   
   app.register_blueprint(payment_route.payment_blueprint(usecases["payment"]), url_prefix='/payment')
   app = create_app(usecases)
-  app.run(debug=True)
+  app.run(debug=False)
   
