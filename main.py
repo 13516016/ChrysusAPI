@@ -4,7 +4,6 @@ from payment import payment_model, payment_repository, payment_usecase, payment_
 from news import news_model, news_repository, news_usecase, news_route
 import configparser
 
-
 def read_config(config_filename='config.ini'):
   config = configparser.ConfigParser()
   config.read(config_filename)
@@ -29,7 +28,6 @@ def create_usecases(repositories):
   usecases["payment"]=payment_usecase.PaymentUsecase(repositories["payment"])
   return usecases
 
-if __name__ == "__main__":
   config = read_config('config.ini')
   engine = connect_db(
     config["POSTGRESQL"]["Username"],
