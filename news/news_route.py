@@ -8,6 +8,6 @@ def news_blueprint(news_usecase):
   def get_all_news():
     if request.method == "GET":
        news = news_usecase.get_all_news()
-       return jsonify({'news': [account.serialize() for account in accounts]})
+       return jsonify({'success':True, 'data': [article.serialize() for article in news]})
 
   return blueprint

@@ -12,6 +12,7 @@ def read_config(config_filename='config.ini'):
 def create_app(usecases):
   app = Flask(__name__)
   app.register_blueprint(payment_route.payment_blueprint(usecases["payment"]), url_prefix='/payment')
+  app.register_blueprint(news_route.news_blueprint(usecases["news"]), url_prefix='/news')
   return app
 
 def connect_db(username, password, host, dbname ):
@@ -25,11 +26,13 @@ def create_models(engine):
 def create_repositories(db_connection):
   repositories = {}
   repositories["payment"] = payment_repository.PaymentRepository(db_connection)
+  repositories["news"] = news_repository.NewsRepository(db_connection)
   return repositories
 
 def create_usecases(repositories):
   usecases = {}
   usecases["payment"]=payment_usecase.PaymentUsecase(repositories["payment"])
+  usecases["news"]=news_usecase.NewsUsecase(repositories["news"])
   return usecases
 
 if __name__ == "__main__":

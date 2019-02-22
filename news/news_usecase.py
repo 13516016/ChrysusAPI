@@ -9,6 +9,6 @@ class NewsUsecase:
     news = []
     for result in result_proxy:
       if (result):
-        news.append(News(result[0],result[1],result[2]))
+        news.append(News(result[0],result[1],result[2],result[3]))
 
     return news
