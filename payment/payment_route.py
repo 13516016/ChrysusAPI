@@ -39,9 +39,9 @@ def payment_blueprint(payment_usecase):
 
       params = request.get_json()
       sender_account_uid = params['sender_account']
-      receiver_account_uid = params['receiver_account']
+      receiver_phone = params['receiver_phone']
       amount = params['amount']
-      if (payment_usecase.transfer_money(sender_account_uid, receiver_account_uid, amount)):
+      if (payment_usecase.transfer_money(sender_account_uid, receiver_phone, amount)):
         return jsonify({'success': True})
       else:
         return jsonify({'success': False})

@@ -29,15 +29,16 @@ class PaymentUsecase:
         account = Account(result[0], result[1], result[2], result[3], result[4], result[5])
     return account
 
-  def transfer_money(self, sender_uid, receiver_uid, amount):
+  def transfer_money(self, sender_uid, receiver_phone, amount):
     sender_account = self.get_account_by_firebase_uid(sender_uid)
     if (sender_account.balance < amount):
       return False
 
+    receiver_account = self.get_account_by_phone(receiver_phone)
     result = self.repository.decrease_account_balance(sender_uid, amount)
     if (result.rowcount > 0):
       print(result.rowcount)
-      result = self.repository.increase_account_balance(receiver_uid, amount)
+      result = self.repository.increase_account_balance(receiver_account.firebase_uid, amount)
       if (result.rowcount > 0):
         print(result.rowcount)
         return True
