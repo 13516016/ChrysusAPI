@@ -15,6 +15,11 @@ class PaymentRepository:
     result_proxy = self.db_conn.execute(query)
     return result_proxy
 
+  def find_account_by_phone(self, phone):
+    query = select([account_model]).where(account_model.c.phone==phone)
+    result_proxy = self.db_conn.execute(query)
+    return result_proxy
+
   def increase_account_balance(self, firebase_uid, amount):
     query = update(account_model).where(account_model.c.firebase_uid==firebase_uid).values(balance=account_model.c.balance + amount)
     result_proxy = self.db_conn.execute(query)

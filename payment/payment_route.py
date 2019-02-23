@@ -8,13 +8,24 @@ def payment_blueprint(payment_usecase):
   @blueprint.route('/', methods=["GET"])
   def get_all_accounts():
     if request.method == "GET":
-       accounts = payment_usecase.get_all_account()
-       return jsonify({'success': True, 'data': [account.serialize() for account in accounts]})
+      accounts = payment_usecase.get_all_account()
+      if len(accounts) > 0:
+        return jsonify({'success': True, 'data': [account.serialize() for account in accounts]})
+      return jsonify({'success': False})
 
-  @blueprint.route('/<firebase_uid>', methods=["GET"])
+  @blueprint.route('/firebase/<firebase_uid>', methods=["GET"])
   def get_account_by_uid(firebase_uid):
     if request.method == "GET":
       account = payment_usecase.get_account_by_firebase_uid(firebase_uid)
+      if isinstance(account, Account):
+        return jsonify({'success': True, 'data': account.serialize()})
+      else:
+        return jsonify({'success': False})
+
+  @blueprint.route('/phone/<phone>', methods=["GET"])
+  def get_account_by_phone(phone):
+    if request.method == "GET":
+      account = payment_usecase.get_account_by_phone(phone)
       if isinstance(account, Account):
         return jsonify({'success': True, 'data': account.serialize()})
       else:

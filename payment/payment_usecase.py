@@ -20,6 +20,14 @@ class PaymentUsecase:
       if (result):
         account = Account(result[0], result[1], result[2], result[3], result[4], result[5])
     return account
+ 
+  def get_account_by_phone(self, phone):
+    result_proxy = self.repository.find_account_by_phone(phone)
+    account = {}
+    for result in result_proxy:
+      if (result):
+        account = Account(result[0], result[1], result[2], result[3], result[4], result[5])
+    return account
 
   def transfer_money(self, sender_uid, receiver_uid, amount):
     sender_account = self.get_account_by_firebase_uid(sender_uid)
