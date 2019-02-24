@@ -46,4 +46,18 @@ def payment_blueprint(payment_usecase):
       else:
         return jsonify({'success': False})
 
+  @blueprint.route('/register', methods=["POST"])
+  def register_device():
+    if request.method == "POST":
+      if (not request.is_json):
+        return jsonify({'success': False, 'message': "Json Only"})
+
+      params = request.get_json()
+      uid = params['account']
+      token = params['token']
+      if (payment_usecase.register_device_token(uid,token)):
+        return jsonify({'success': True})
+      else:
+        return jsonify({'success': False})
+
   return blueprint

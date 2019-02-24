@@ -3,16 +3,17 @@ from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
 metadata = MetaData()
 
 class Account:
-  def __init__(self, account_id, firebase_uid,name, address, phone, balance):
+  def __init__(self, account_id, firebase_uid,name, address, phone, balance, device_token):
     self.account_id = account_id
     self.firebase_uid = firebase_uid
     self.balance = balance
     self.name = name
     self.address = address
     self.phone = phone
+    self.device_token = device_token
 
   def __eq__(self,other):
-    return self.firebase_uid == other.firebase_uid and self.account_no == other.account_no and self.balance == other.balance and self.name == other.name and self.address == other.address and self.phone == other.phone
+    return self.firebase_uid == other.firebase_uid and self.account_no == other.account_no and self.balance == other.balance and self.name == other.name and self.address == other.address and self.phone == other.phone and self.device_token == other.device_token
 
   def serialize(self):
     return self.__dict__
@@ -41,7 +42,9 @@ account_model = Table(
   Column('name', String), 
   Column('address', String), 
   Column('phone', String), 
-  Column('balance', Integer))
+  Column('balance', Integer),
+  Column('device_token', Integer)
+)
 
 transaction_model = Table(
   'transaction', metadata, 
