@@ -2,6 +2,9 @@ from flask import Flask
 from sqlalchemy import create_engine, select
 from payment import payment_model, payment_repository, payment_usecase, payment_route
 from news import news_model, news_repository, news_usecase, news_route
+from firebase.firebase_service import FirebaseService
+from firebase_admin import credentials, initialize_app
+
 import configparser
 
 def read_config(config_filename='config.ini'):
@@ -29,14 +32,24 @@ def create_repositories(db_connection):
   repositories["news"] = news_repository.NewsRepository(db_connection)
   return repositories
 
-def create_usecases(repositories):
+def create_services():
+  services = {}
+  services["firebase"] = FirebaseService()
+  return services
+
+def create_usecases(repositories, services):
   usecases = {}
-  usecases["payment"]=payment_usecase.PaymentUsecase(repositories["payment"])
+  usecases["payment"]=payment_usecase.PaymentUsecase(repositories["payment"], services["firebase"])
   usecases["news"]=news_usecase.NewsUsecase(repositories["news"])
   return usecases
 
+def initialize_firebase():
+  cred = credentials.Certificate("./firebase_cred.json")
+  initialize_app(cred)
+
 if __name__ == "__main__":
   config = read_config('config.ini')
+  initialize_firebase()
   engine = connect_db(
     config["POSTGRESQL"]["Username"],
     config["POSTGRESQL"]["Password"],
@@ -45,7 +58,8 @@ if __name__ == "__main__":
   create_models(engine)
   db_connection = engine.connect()
   repositories = create_repositories(db_connection)
-  usecases = create_usecases(repositories)
+  services = create_services()
+  usecases = create_usecases(repositories, services)
 
   app = create_app(usecases)
   app.run(debug=False)
